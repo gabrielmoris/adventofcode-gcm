@@ -32,8 +32,8 @@ export const solutionFn2 = ({ arg }: { arg: string }) => {
       const stringifiedId = i.toString();
 
       const doubled = stringifiedId + stringifiedId;
-      const pos = doubled.indexOf(stringifiedId, 1);
-      if (pos !== -1 && pos < stringifiedId.length) {
+      const positionOfSecondRepetition = doubled.indexOf(stringifiedId, 1);
+      if (positionOfSecondRepetition !== -1 && positionOfSecondRepetition < stringifiedId.length) {
         allInvalidIds += Number(stringifiedId);
       }
     }
