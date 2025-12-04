@@ -17,7 +17,7 @@ export const solutionFn = ({ arg }: { arg: string }) => {
 const checkArroundRoll = (arrayOfRollsOfPaper: string[][], row: number, col: number) => {
   const target = arrayOfRollsOfPaper[row][col];
 
-  if (target === ".") return 100;
+  if (target !== "@") return 100;
 
   const top = arrayOfRollsOfPaper[row - 1]?.[col] === "@" ? 1 : 0;
   const topRight = arrayOfRollsOfPaper[row - 1]?.[col + 1] === "@" ? 1 : 0;
@@ -29,4 +29,27 @@ const checkArroundRoll = (arrayOfRollsOfPaper: string[][], row: number, col: num
   const topLeft = arrayOfRollsOfPaper[row - 1]?.[col - 1] === "@" ? 1 : 0;
 
   return top + topRight + right + bottomRight + bottom + bottomLeft + left + topLeft;
+};
+
+export const solutionFn2 = ({ arg }: { arg: string }) => {
+  let rollsOfPaper = 0;
+  let somethinbgWasRemoved = true;
+  const lineOfPaper = arg.split("\n");
+
+  let arrayOfRollsOfPaper = lineOfPaper.map((line) => [...line.split("")]);
+
+  while (somethinbgWasRemoved) {
+    somethinbgWasRemoved = false;
+    arrayOfRollsOfPaper.forEach((line, index) => {
+      line.forEach((_cell, index2) => {
+        const numberOfNeighbours = checkArroundRoll(arrayOfRollsOfPaper, index, index2);
+        if (numberOfNeighbours < 4) {
+          rollsOfPaper++;
+          arrayOfRollsOfPaper[index][index2] = ".";
+          somethinbgWasRemoved = true;
+        }
+      });
+    });
+  }
+  return rollsOfPaper; //200 too high
 };
