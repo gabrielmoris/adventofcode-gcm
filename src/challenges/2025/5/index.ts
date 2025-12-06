@@ -40,7 +40,7 @@ export const solutionFn2 = ({ arg }: { arg: string }) => {
   let total = 0;
   let [start, end] = arrayOfRanges[0];
 
-  // formula endingRange - startingRange + 1 = total number of IDs
+  // formula: endingRange - startingRange + 1 = total number of IDs
   for (let i = 1; i < arrayOfRanges.length; i++) {
     const [currStart, currEnd] = arrayOfRanges[i];
     if (currStart <= end + 1) {
