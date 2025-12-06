@@ -59,7 +59,7 @@ export const solutionFn2 = ({ arg }: { arg: string }) => {
     let total = 0;
     const currOperator = operators[colPosition];
     // 1. I terate over the columns and separate them on an array of numbers. (3d array)\
-    // 2. I iterate over the 3d array and sum the numbers of each column. (From right to left of each column. we have tot ake into account the 0 that are the  )
+    // 2. I iterate over the 3d array and sum the numbers of each column. (From right to left of each column. we have tot ake into account the 0 that are the spaces!)
   }
 
   return solution;
