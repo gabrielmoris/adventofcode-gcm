@@ -53,13 +53,6 @@ export const solutionFn2 = ({ arg }: { arg: string }) => {
   return operateNumbers(operators?.reverse(), rotatedNumbers);
 };
 
-const isSeparator = (grid: string[][], col: number, height: number): boolean => {
-  for (let row = 0; row < height; row++) {
-    if (grid[row][col] !== " " && grid[row][col] !== undefined) return false;
-  }
-  return true;
-};
-
 const buildVerticalNumbers = (columns: string[]): number[][] => {
   const grid = columns.map((line) => line.split("").map((column) => (column === " " ? " " : column)));
 
