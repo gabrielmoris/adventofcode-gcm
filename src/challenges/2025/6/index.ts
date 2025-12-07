@@ -1,4 +1,6 @@
 export const solutionFn = ({ arg }: { arg: string }) => {
+  let solution = 0;
+
   const columns = arg.split("\n");
   const operators = columns
     .pop()
@@ -11,12 +13,8 @@ export const solutionFn = ({ arg }: { arg: string }) => {
       .map(Number)
       .filter((num) => num !== 0)
   );
-  return operateNumbers(operators, numbers);
-};
 
-const operateNumbers = (operators: string[] | undefined, numbers: string | any[]) => {
   let colPosition = 0;
-  let solution = 0;
 
   while (operators && colPosition < operators?.length) {
     let total = 0;
@@ -42,6 +40,7 @@ const operateNumbers = (operators: string[] | undefined, numbers: string | any[]
 };
 
 export const solutionFn2 = ({ arg }: { arg: string }) => {
+  let solution = 0;
   const columns = arg.split("\n");
   const operators = columns
     .pop()
@@ -49,17 +48,48 @@ export const solutionFn2 = ({ arg }: { arg: string }) => {
     .filter((operator) => operator !== "");
 
   const rotatedNumbers: number[][] = buildVerticalNumbers(columns);
-  console.log("Rotated Numbers", rotatedNumbers);
-  return operateNumbers(operators?.reverse(), rotatedNumbers);
+  if (!operators) throw new Error("No operators!");
+  const reversedOperators = operators.reverse();
+
+  for (let i = 0; i < reversedOperators.length; i++) {
+    let total = 0;
+    rotatedNumbers[i].forEach((num) => {
+      if (reversedOperators[i] === "*") {
+        if (total === 0) {
+          total = 1;
+        }
+        total *= num;
+      } else if (reversedOperators[i] === "+") {
+        total += num;
+      }
+    });
+    solution += total;
+    total = 0;
+  }
+
+  return solution;
 };
 
 const buildVerticalNumbers = (columns: string[]): number[][] => {
-  const grid = columns.map((line) => line.split("").map((column) => (column === " " ? " " : column)));
-
+  const grid = columns.map((line) => line.split("").map((column) => (column === " " ? " " : column))).map((line) => line.reverse());
+  const verticalNumbers: number[][] = [];
   const rowLength = grid[0].length;
+  let currentNumbersRow: number[] = [];
 
-  console.log(grid);
-  // From here rebuild the array starting from grid[grid.lenght-1][rowLength-1] and making the numbers until I have the new arrays.
+  for (let i = 0; i < rowLength; i++) {
+    let num = "";
 
-  return [[]];
+    for (let j = 0; j < grid.length; j++) {
+      num += grid[j][i];
+    }
+
+    if (Number(num) !== 0) {
+      currentNumbersRow.push(Number(num));
+    } else {
+      verticalNumbers.push(currentNumbersRow);
+      currentNumbersRow = [];
+    }
+  }
+  verticalNumbers.push(currentNumbersRow);
+  return verticalNumbers;
 };
