@@ -1,6 +1,4 @@
 export const solutionFn = ({ arg }: { arg: string }) => {
-  let solution = 0;
-
   const columns = arg.split("\n");
   const operators = columns
     .pop()
@@ -13,8 +11,12 @@ export const solutionFn = ({ arg }: { arg: string }) => {
       .map(Number)
       .filter((num) => num !== 0)
   );
+  return operateNumbers(operators, numbers);
+};
 
+const operateNumbers = (operators: string[] | undefined, numbers: string | any[]) => {
   let colPosition = 0;
+  let solution = 0;
 
   while (operators && colPosition < operators?.length) {
     let total = 0;
@@ -40,27 +42,31 @@ export const solutionFn = ({ arg }: { arg: string }) => {
 };
 
 export const solutionFn2 = ({ arg }: { arg: string }) => {
-  let solution = 0;
-
   const columns = arg.split("\n");
   const operators = columns
     .pop()
     ?.split(" ")
     .filter((operator) => operator !== "");
 
-  const numbers = columns.map(
-    (column) => column.split(" ").map(Number)
-    // .filter((num) => num !== 0) Not  needed because it tells me the possition of the numbers to calculate from right to left
-  );
+  const rotatedNumbers: number[][] = buildVerticalNumbers(columns);
+  console.log("Rotated Numbers", rotatedNumbers);
+  return operateNumbers(operators?.reverse(), rotatedNumbers);
+};
 
-  let colPosition = 0;
-
-  while (operators && colPosition < operators?.length) {
-    let total = 0;
-    const currOperator = operators[colPosition];
-    // 1. I terate over the columns and separate them on an array of numbers. (3d array)\
-    // 2. I iterate over the 3d array and sum the numbers of each column. (From right to left of each column. we have tot ake into account the 0 that are the spaces!)
+const isSeparator = (grid: string[][], col: number, height: number): boolean => {
+  for (let row = 0; row < height; row++) {
+    if (grid[row][col] !== " " && grid[row][col] !== undefined) return false;
   }
+  return true;
+};
 
-  return solution;
+const buildVerticalNumbers = (columns: string[]): number[][] => {
+  const grid = columns.map((line) => line.split("").map((column) => (column === " " ? " " : column)));
+
+  const rowLength = grid[0].length;
+
+  console.log(grid);
+  // From here rebuild the array starting from grid[grid.lenght-1][rowLength-1] and making the numbers until I have the new arrays.
+
+  return [[]];
 };
