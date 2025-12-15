@@ -33,5 +33,26 @@ export const solutionFn2 = ({ arg }: { arg: string }) => {
   // 2. check if the area fullfills the conditions to be included inside green and red tiles with a function
   // 3. check if it is bigger than current area
 
+  tiles.forEach((tile) => {
+    tiles.forEach((secondTile) => {
+      if (tile[0] === secondTile[0] && tile[1] === secondTile[1]) {
+        return;
+      }
+      const isAreaValid = checkIfAreaIsValid(tile, secondTile, tiles);
+      if (!isAreaValid) {
+        return;
+      }
+      const currentArea = calculateArea(tile, secondTile);
+      if (currentArea > area) {
+        area = currentArea;
+      }
+    });
+  });
   return area;
+};
+
+const checkIfAreaIsValid = (tile: number[], secondTile: number[], tiles: number[][]) => {
+  console.log(tile, secondTile, tiles);
+
+  return false;
 };
