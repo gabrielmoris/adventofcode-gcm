@@ -28,63 +28,66 @@ const calculateArea = (vertexPoint1: number[], vertexPoint: number[]) => {
 
 export const solutionFn2 = ({ arg }: { arg: string }) => {
   const tiles = arg.split("\n").map((line) => line.split(",").map(Number)) as Point[];
-  const coloredSet = createPoligon(tiles);
+  const coloredSet = createPolygon(tiles);
 
   let area = 0;
 
-  // tiles.forEach((tile) => {
-  //   tiles.forEach((secondTile) => {
-  //     if (tile[0] === secondTile[0] && tile[1] === secondTile[1]) return;
+  tiles.forEach((tile) => {
+    tiles.forEach((secondTile) => {
+      if (tile[0] === secondTile[0] && tile[1] === secondTile[1]) return;
 
-  //     if (!checkIfAreaIsValid(tile, secondTile, coloredSet)) return;
-  //     const currentArea = calculateArea(tile, secondTile);
-  //     if (currentArea > area) area = currentArea;
-  //   });
-  // });
+      if (!checkIfAreaIsValid(tile, secondTile, coloredSet)) return;
+      const currentArea = calculateArea(tile, secondTile);
+      if (currentArea > area) area = currentArea;
+    });
+  });
 
   console.log([...coloredSet]);
   console.log(coloredSet.has("7,1"));
   return area;
 };
 
-// const checkIfAreaIsValid = (corner1: Point, cortner2: Point, coloredSet: Set<string>): boolean => {
-//   const xmin = Math.min(corner1[0], cortner2[0]);
-//   const xmax = Math.max(corner1[0], cortner2[0]);
-//   const ymin = Math.min(corner1[1], cortner2[1]);
-//   const ymax = Math.max(corner1[1], cortner2[1]);
+const checkIfAreaIsValid = (corner1: Point, cortner2: Point, coloredSet: Set<string>): boolean => {
+  const xmin = Math.min(corner1[0], cortner2[0]);
+  const xmax = Math.max(corner1[0], cortner2[0]);
+  const ymin = Math.min(corner1[1], cortner2[1]);
+  const ymax = Math.max(corner1[1], cortner2[1]);
 
-//   for (let x = xmin; x <= xmax; x++) {
-//     for (let y = ymin; y <= ymax; y++) {
-//       if (!coloredSet.has(`${x},${y}`)) {
-//         return false;
-//       }
-//     }
-//   }
-//   return true;
-// };
+  for (let x = xmin; x <= xmax; x++) {
+    for (let y = ymin; y <= ymax; y++) {
+      if (!coloredSet.has(`${x},${y}`)) {
+        return false;
+      }
+    }
+  }
+  return true;
+};
 
-const createPoligon = (tiles: Point[]) => {
+const createPolygon = (tiles: Point[]) => {
   const polygon = new Set<string>();
 
-  tiles.forEach(([x, y]) => {
-    polygon.add(`${x},${y}`);
-    tiles.forEach(([x2, y2]) => {
-      if (x === x2 && y === y2) return;
+  // Red tiles
+  tiles.forEach(([x, y]) => polygon.add(`${x},${y}`));
 
-      polygon.add(`${x2},${y2}`);
+  // Green tiles (lines)
+  for (let i = 0; i < tiles.length; i++) {
+    const curr = tiles[i];
+    const next = tiles[(i + 1) % tiles.length];
 
-      const minX = Math.min(x, x2);
-      const maxX = Math.max(x, x2);
-      const minY = Math.min(y, y2);
-      const maxY = Math.max(y, y2);
+    if (curr[1] === next[1]) {
+      const y = curr[1];
+      const minX = Math.min(curr[0], next[0]);
+      const maxX = Math.max(curr[0], next[0]);
+      for (let x = minX; x <= maxX; x++) polygon.add(`${x},${y}`);
+    } else if (curr[0] === next[0]) {
+      const x = curr[0];
+      const minY = Math.min(curr[1], next[1]);
+      const maxY = Math.max(curr[1], next[1]);
+      for (let y = minY; y <= maxY; y++) polygon.add(`${x},${y}`);
+    }
+  }
 
-      for (let x = minX; x <= maxX; x++) {
-        for (let y = minY; y <= maxY; y++) {
-          polygon.add(`${x},${y}`);
-        }
-      }
-    });
-  });
+  // TODO: Fill green
 
   return polygon;
 };
